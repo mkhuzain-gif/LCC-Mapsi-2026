@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tidak Ada Koneksi | LCC MAPSI XXVII 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Nunito", system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f0a1e 0%, #4c1d95 50%, #1a1033 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 1.5rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      animation: slideUp 0.5s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #a78bfa, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #6d28d9, #4c1d95);
+      padding: 0.3rem 1rem;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    button {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(109,40,217,0.4);
+      width: 100%;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(109,40,217,0.5);
+    }
+    button:active { transform: translateY(0); }
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="icon">📡</span>
+    <div class="badge">LCC MAPSI XXVII 2026</div>
+    <h1>Tidak Ada Koneksi Internet</h1>
+    <p>
+      Pastikan perangkat kamu terhubung ke WiFi atau data seluler,
+      lalu coba muat ulang halaman.
+    </p>
+    <button onclick="window.location.reload()">
+      🔄 Muat Ulang Halaman
+    </button>
+    <div class="footer">
+      Jika masalah berlanjut, hubungi panitia LCC MAPSI
+    </div>
+  </div>
+</body>
+</html>
