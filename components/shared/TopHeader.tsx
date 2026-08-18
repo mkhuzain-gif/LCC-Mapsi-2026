@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { Bell, Menu } from "lucide-react";
 import type { UserRole } from "@/lib/types/database";
 
 interface TopHeaderProps {
@@ -17,16 +17,31 @@ export function TopHeader({ title, subtitle, role, actions }: TopHeaderProps) {
     participant: { label: "Peserta", class: "clay-badge clay-badge-success" },
   }[role];
 
+  const handleToggleSidebar = () => {
+    window.dispatchEvent(new CustomEvent("mapsi_toggle_sidebar"));
+  };
+
   return (
     <header className="clay-header">
+      {/* Mobile Hamburger Button */}
+      <button
+        type="button"
+        onClick={handleToggleSidebar}
+        className="mobile-hamburger-btn"
+        aria-label="Buka Menu Navigasi"
+        id="topheader-menu-btn"
+      >
+        <Menu size={20} color="var(--color-primary)" />
+      </button>
+
       {/* Title */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
           <h1
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 800,
-              fontSize: "1.2rem",
+              fontSize: "1.15rem",
               color: "var(--color-text)",
               margin: 0,
               lineHeight: 1.2,
@@ -34,10 +49,12 @@ export function TopHeader({ title, subtitle, role, actions }: TopHeaderProps) {
           >
             {title}
           </h1>
-          <span className={roleBadge.class}>{roleBadge.label}</span>
+          <span className={roleBadge.class} style={{ fontSize: "0.72rem", padding: "0.15rem 0.55rem" }}>
+            {roleBadge.label}
+          </span>
         </div>
         {subtitle && (
-          <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: "2px", fontWeight: 500 }}>
+          <p className="hide-mobile-subtitle" style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "2px", fontWeight: 500 }}>
             {subtitle}
           </p>
         )}
@@ -45,7 +62,7 @@ export function TopHeader({ title, subtitle, role, actions }: TopHeaderProps) {
 
       {/* Actions */}
       {actions && (
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
           {actions}
         </div>
       )}
@@ -53,36 +70,13 @@ export function TopHeader({ title, subtitle, role, actions }: TopHeaderProps) {
       {/* Notification bell */}
       <button
         id="header-notifications-btn"
-        style={{
-          background: "var(--color-surface-2)",
-          border: "1.5px solid var(--color-border)",
-          borderRadius: "12px",
-          width: 40,
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          position: "relative",
-          boxShadow: "var(--clay-shadow-sm)",
-          flexShrink: 0,
-        }}
+        className="header-bell-btn"
         aria-label="Notifikasi"
       >
         <Bell size={18} color="var(--color-text-muted)" />
-        <span
-          style={{
-            position: "absolute",
-            top: 6,
-            right: 6,
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: "var(--color-danger)",
-            border: "2px solid white",
-          }}
-        />
+        <span className="header-bell-dot" />
       </button>
     </header>
   );
 }
+

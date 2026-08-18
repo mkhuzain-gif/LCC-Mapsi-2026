@@ -164,7 +164,7 @@ export function SettingsClient({ role }: SettingsClientProps) {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "1.5rem", alignItems: "start" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "start" }}>
             {/* Drop zone */}
             <div
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -172,6 +172,8 @@ export function SettingsClient({ role }: SettingsClientProps) {
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
               style={{
+                flex: 1,
+                minWidth: 220,
                 border: `2px dashed ${isDragging ? "var(--color-primary)" : "var(--color-border)"}`,
                 borderRadius: 16,
                 padding: "2rem",
@@ -277,7 +279,7 @@ export function SettingsClient({ role }: SettingsClientProps) {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div className="grid-settings-form">
             {/* App Name */}
             <div className="form-group" style={{ gridColumn: "1 / -1" }}>
               <label className="form-label" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>

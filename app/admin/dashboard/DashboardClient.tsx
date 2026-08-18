@@ -126,7 +126,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
         }
       />
 
-      <div style={{ padding: "2rem" }}>
+      <div className="dashboard-container">
         {/* Active Session Banner */}
         {stats.activeSession && (
           <div
@@ -153,7 +153,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                 flexShrink: 0,
               }}
             />
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontWeight: 800, fontSize: "1rem", color: "var(--color-success)" }}>
                 ✅ Ujian Sedang Berlangsung
               </div>
@@ -164,7 +164,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                 </span>
               </div>
             </div>
-            <Link href="/admin/monitoring" className="clay-btn clay-btn-success clay-btn-sm">
+            <Link href="/admin/monitoring" className="clay-btn clay-btn-success clay-btn-sm" style={{ flexShrink: 0 }}>
               Monitor Ujian →
             </Link>
           </div>
@@ -187,7 +187,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
             }}
           >
             <Clock size={22} color="var(--color-accent)" />
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontWeight: 800, color: "var(--color-accent)" }}>
                 ⏳ Ujian Dimulai Dalam
               </div>
@@ -210,9 +210,9 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1rem" }}>
                   <div
                     style={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: "16px",
+                      width: 46,
+                      height: 46,
+                      borderRadius: "14px",
                       background: card.iconBg,
                       display: "flex",
                       alignItems: "center",
@@ -228,7 +228,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                   style={{
                     fontFamily: "var(--font-display)",
                     fontWeight: 900,
-                    fontSize: "2rem",
+                    fontSize: "1.8rem",
                     lineHeight: 1,
                     marginBottom: "0.25rem",
                   }}
@@ -244,7 +244,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
         </div>
 
         {/* Progress + Sessions Row */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <div className="grid-dashboard-2col">
           {/* Completion Progress */}
           <div className="clay-card" style={{ padding: "1.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
@@ -267,18 +267,18 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
               <div className="clay-progress-bar" style={{ width: `${completionPct}%` }} />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.75rem", marginTop: "1.25rem" }}>
-              <div style={{ textAlign: "center", padding: "0.75rem", background: "var(--color-success-lighter)", borderRadius: "12px" }}>
-                <div style={{ fontWeight: 900, fontSize: "1.2rem", color: "var(--color-success)" }}>{stats.submittedCount}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--color-success)", fontWeight: 600 }}>Selesai</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.5rem", marginTop: "1.25rem" }}>
+              <div style={{ textAlign: "center", padding: "0.6rem 0.4rem", background: "var(--color-success-lighter)", borderRadius: "12px" }}>
+                <div style={{ fontWeight: 900, fontSize: "1.15rem", color: "var(--color-success)" }}>{stats.submittedCount}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--color-success)", fontWeight: 600 }}>Selesai</div>
               </div>
-              <div style={{ textAlign: "center", padding: "0.75rem", background: "var(--color-info-lighter)", borderRadius: "12px" }}>
-                <div style={{ fontWeight: 900, fontSize: "1.2rem", color: "var(--color-info)" }}>{stats.inProgressCount}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--color-info)", fontWeight: 600 }}>Mengerjakan</div>
+              <div style={{ textAlign: "center", padding: "0.6rem 0.4rem", background: "var(--color-info-lighter)", borderRadius: "12px" }}>
+                <div style={{ fontWeight: 900, fontSize: "1.15rem", color: "var(--color-info)" }}>{stats.inProgressCount}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--color-info)", fontWeight: 600 }}>Mengerjakan</div>
               </div>
-              <div style={{ textAlign: "center", padding: "0.75rem", background: "var(--color-accent-lighter)", borderRadius: "12px" }}>
-                <div style={{ fontWeight: 900, fontSize: "1.2rem", color: "var(--color-accent)" }}>{stats.notStartedCount}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--color-accent)", fontWeight: 600 }}>Belum Mulai</div>
+              <div style={{ textAlign: "center", padding: "0.6rem 0.4rem", background: "var(--color-accent-lighter)", borderRadius: "12px" }}>
+                <div style={{ fontWeight: 900, fontSize: "1.15rem", color: "var(--color-accent)" }}>{stats.notStartedCount}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--color-accent)", fontWeight: 600 }}>Belum Mulai</div>
               </div>
             </div>
           </div>
@@ -311,13 +311,15 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                     style={{
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "space-between",
                       gap: "0.75rem",
-                      padding: "0.75rem",
+                      padding: "0.85rem",
                       background: "var(--color-surface-2)",
                       borderRadius: "12px",
+                      flexWrap: "wrap",
                     }}
                   >
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ flex: 1, minWidth: 120 }}>
                       <div style={{ fontWeight: 700, fontSize: "0.875rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {session.title}
                       </div>
@@ -325,7 +327,7 @@ export function AdminDashboardClient({ stats, sessions, announcements }: AdminDa
                         {session.duration_minutes} menit • {session.stage}
                       </div>
                     </div>
-                    <span className={`clay-badge ${statusColor[session.status]}`}>
+                    <span className={`clay-badge ${statusColor[session.status]}`} style={{ flexShrink: 0 }}>
                       {statusLabel[session.status]}
                     </span>
                   </div>

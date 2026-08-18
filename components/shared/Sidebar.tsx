@@ -107,9 +107,15 @@ export function Sidebar({ role, userName }: SidebarProps) {
     window.addEventListener("mapsi_config_changed", handleConfigChange);
     window.addEventListener("storage", handleStorageChange);
 
+    const handleToggleMobile = () => {
+      setMobileOpen((prev) => !prev);
+    };
+    window.addEventListener("mapsi_toggle_sidebar", handleToggleMobile);
+
     return () => {
       window.removeEventListener("mapsi_config_changed", handleConfigChange);
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("mapsi_toggle_sidebar", handleToggleMobile);
     };
   }, []);
 
@@ -204,9 +210,8 @@ export function Sidebar({ role, userName }: SidebarProps) {
         })}
       </nav>
 
-      {/* User info + logout + role badge (semua dalam satu grup di paling bawah) */}
+      {/* User info + logout + role badge */}
       <div style={{ padding: "0.75rem", borderTop: "1.5px solid var(--color-border)" }}>
-        {/* Username card: avatar + nama + badge Administrator sejajar dalam satu kartu */}
         {!collapsed && (
           <div
             style={{
@@ -240,7 +245,6 @@ export function Sidebar({ role, userName }: SidebarProps) {
               <div style={{ fontWeight: 700, fontSize: "0.85rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {userName}
               </div>
-              {/* Badge Administrator di dalam kartu, sejajar dengan nama */}
               <span className={roleBadgeClass} style={{ fontSize: "0.7rem", padding: "0.1rem 0.5rem" }}>
                 {roleLabel}
               </span>
@@ -267,28 +271,11 @@ export function Sidebar({ role, userName }: SidebarProps) {
         </button>
       </div>
 
-      {/* Collapse toggle - desktop */}
+      {/* Collapse toggle - desktop only */}
       <button
-        className="hide-mobile"
+        className="sidebar-collapse-btn hide-mobile"
         onClick={() => setCollapsed(!collapsed)}
         id="sidebar-collapse-btn"
-        style={{
-          position: "absolute",
-          top: "50%",
-          right: -14,
-          transform: "translateY(-50%)",
-          width: 28,
-          height: 28,
-          borderRadius: "50%",
-          background: "white",
-          border: "1.5px solid var(--color-border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          boxShadow: "var(--clay-shadow-sm)",
-          zIndex: 10,
-        }}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
@@ -306,16 +293,10 @@ export function Sidebar({ role, userName }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Single Responsive Sidebar */}
       <aside
-        className={`clay-sidebar show-mobile ${mobileOpen ? "mobile-open" : ""}`}
-        style={{ width: collapsed ? 72 : 260, position: "fixed" }}
-      >
-        {sidebarContent}
-      </aside>
-      <aside
-        className={`clay-sidebar hide-mobile`}
-        style={{ width: collapsed ? 72 : 260, position: "fixed" }}
+        className={`clay-sidebar ${collapsed ? "clay-sidebar-collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}
+        style={{ width: collapsed ? 72 : 260 }}
       >
         {sidebarContent}
       </aside>
@@ -328,20 +309,11 @@ export function MobileMenuButton({ onClick }: { onClick: () => void }) {
     <button
       onClick={onClick}
       id="mobile-menu-btn"
-      style={{
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "0.5rem",
-        borderRadius: "10px",
-        color: "var(--color-text)",
-      }}
+      className="mobile-hamburger-btn"
       aria-label="Toggle menu"
     >
-      <Menu size={22} />
+      <Menu size={20} />
     </button>
   );
 }
+
