@@ -36,21 +36,21 @@ export function AuthHeader() {
   const logoUrl = config?.logoDataUrl || "/icon-192.png";
 
   return (
-    <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+    <div style={{ textAlign: "center", marginBottom: "1.25rem" }}>
       {/* Logo Container */}
       <div
         style={{
-          width: 76,
-          height: 76,
-          borderRadius: "24px",
+          width: 58,
+          height: 58,
+          borderRadius: "18px",
           background: "linear-gradient(135deg, var(--color-primary-light), var(--color-primary))",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          margin: "0 auto 1rem",
-          boxShadow: "var(--clay-shadow-md)",
+          margin: "0 auto 0.6rem",
+          boxShadow: "var(--clay-shadow-sm)",
           overflow: "hidden",
-          padding: 6,
+          padding: 4,
         }}
       >
         {logoUrl ? (
@@ -61,13 +61,13 @@ export function AuthHeader() {
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              borderRadius: "18px",
+              borderRadius: "14px",
               background: "white",
-              padding: "4px",
+              padding: "3px",
             }}
           />
         ) : (
-          <GraduationCap size={38} color="white" />
+          <GraduationCap size={30} color="white" />
         )}
       </div>
 
@@ -76,19 +76,20 @@ export function AuthHeader() {
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 900,
-          fontSize: "1.8rem",
+          fontSize: "1.5rem",
           background: "linear-gradient(135deg, var(--color-primary), var(--color-secondary))",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
           lineHeight: 1.2,
+          margin: 0,
         }}
       >
         {appName} {edition}
       </h1>
 
       {/* Subtitle */}
-      <p style={{ color: "var(--color-text-muted)", fontWeight: 600, marginTop: "0.25rem" }}>
+      <p style={{ color: "var(--color-text-muted)", fontWeight: 600, fontSize: "0.82rem", marginTop: "0.2rem" }}>
         Sistem Ujian Online PAI & BTQ {eventYear}
       </p>
     </div>
@@ -125,7 +126,7 @@ export function AuthFooter() {
   const eventYear = config?.eventYear || "2026";
 
   return (
-    <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+    <div style={{ textAlign: "center", marginTop: "1rem" }}>
       <button
         type="button"
         onClick={() => window.dispatchEvent(new CustomEvent("mapsi_trigger_pwa_install"))}
@@ -133,15 +134,15 @@ export function AuthFooter() {
           background: "rgba(109,40,217,0.08)",
           color: "var(--color-primary)",
           border: "1px solid rgba(109,40,217,0.2)",
-          padding: "0.45rem 1rem",
+          padding: "0.35rem 0.85rem",
           borderRadius: "99px",
-          fontSize: "0.78rem",
+          fontSize: "0.75rem",
           fontWeight: 700,
           cursor: "pointer",
           display: "inline-flex",
           alignItems: "center",
-          gap: "0.4rem",
-          marginBottom: "0.75rem",
+          gap: "0.35rem",
+          marginBottom: "0.5rem",
           transition: "all 0.2s",
         }}
         id="auth-pwa-install-trigger"
@@ -150,9 +151,10 @@ export function AuthFooter() {
       </button>
       <p
         style={{
-          fontSize: "0.8rem",
+          fontSize: "0.75rem",
           color: "var(--color-text-light)",
           fontWeight: 500,
+          margin: 0,
         }}
       >
         © {eventYear} Panitia MAPSI {edition}. All rights reserved.

@@ -860,48 +860,55 @@ body {
 .page-container {
   padding: 1.5rem 2rem;
   max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
   .page-container {
-    padding: 1rem 0.75rem !important;
+    padding: 0.85rem 0.65rem !important;
   }
 }
 
 /* Responsive Stat Grids */
 .grid-stats-5 {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
 }
 
 .grid-stats-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
 }
 
 @media (max-width: 960px) {
   .grid-stats-5 {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
   }
   .grid-stats-4 {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
   }
 }
 
 @media (max-width: 600px) {
   .grid-stats-5 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
+  .grid-stats-5 > *:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
   .grid-stats-4 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
@@ -910,14 +917,14 @@ body {
 /* Modal Responsive Grids */
 .modal-grid-3 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .modal-grid-2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -937,6 +944,7 @@ body {
   margin-bottom: 1rem;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 640px) {
@@ -952,14 +960,21 @@ body {
 /* Monitoring 2-Column Responsive Layout */
 .grid-monitoring-layout {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 1.25rem;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.grid-monitoring-layout > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 1024px) {
   .grid-monitoring-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
   }
 }
@@ -1354,10 +1369,9 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
-/* Touch target minimum 44px (Apple HIG) */
-button, a, [role="button"] {
-  min-height: 44px;
-  min-width: 44px;
+/* Standalone buttons & links comfortable touch target */
+.clay-btn {
+  min-height: 38px;
 }
 
 /* Clay nav items sudah cukup tinggi di desktop, pastikan mobile pun OK */
@@ -1370,9 +1384,6 @@ button, a, [role="button"] {
   .clay-header {
     padding: 0.75rem 1rem;
     gap: 0.6rem;
-  }
-  .main-content > div > div:not(.clay-header) {
-    padding: 1rem !important;
   }
 }
 

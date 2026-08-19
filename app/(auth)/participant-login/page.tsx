@@ -165,33 +165,33 @@ export default function ParticipantLoginPage() {
   };
 
   return (
-    <div className="clay-card" style={{ padding: "2.5rem 2rem" }}>
+    <div className="clay-card" style={{ padding: "1.75rem 1.75rem", width: "100%", boxSizing: "border-box" }}>
       <h2
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 800,
-          fontSize: "1.35rem",
-          marginBottom: "0.4rem",
+          fontSize: "1.25rem",
+          marginBottom: "0.25rem",
         }}
       >
         Login Peserta
       </h2>
-      <p style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", marginBottom: "2rem", fontWeight: 500 }}>
+      <p style={{ color: "var(--color-text-muted)", fontSize: "0.825rem", marginBottom: "1.25rem", fontWeight: 500 }}>
         Masukkan nomor undian dan token ujian Anda
       </p>
 
       <form onSubmit={handleSubmit} noValidate>
         {/* Draw Number / No Undian */}
-        <div className="form-group" style={{ marginBottom: "1.25rem" }}>
-          <label className="form-label" htmlFor="participant-draw-number">
+        <div className="form-group" style={{ marginBottom: "1rem" }}>
+          <label className="form-label" htmlFor="participant-draw-number" style={{ fontSize: "0.8rem" }}>
             No. Undian Peserta
           </label>
           <div style={{ position: "relative" }}>
             <Hash
-              size={16}
+              size={15}
               style={{
                 position: "absolute",
-                left: "0.9rem",
+                left: "0.85rem",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var(--color-text-muted)",
@@ -202,7 +202,7 @@ export default function ParticipantLoginPage() {
               id="participant-draw-number"
               type="text"
               className="clay-input"
-              style={{ paddingLeft: "2.5rem", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700 }}
+              style={{ paddingLeft: "2.4rem", paddingRight: "0.85rem", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, fontSize: "0.875rem", height: "42px" }}
               placeholder="Contoh: 001"
               value={drawNumber}
               onChange={(e) => setDrawNumber(e.target.value)}
@@ -214,16 +214,16 @@ export default function ParticipantLoginPage() {
         </div>
 
         {/* Token */}
-        <div className="form-group" style={{ marginBottom: "1.75rem" }}>
-          <label className="form-label" htmlFor="participant-token">
+        <div className="form-group" style={{ marginBottom: "1rem" }}>
+          <label className="form-label" htmlFor="participant-token" style={{ fontSize: "0.8rem" }}>
             Token Ujian
           </label>
           <div style={{ position: "relative" }}>
             <Key
-              size={16}
+              size={15}
               style={{
                 position: "absolute",
-                left: "0.9rem",
+                left: "0.85rem",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var(--color-text-muted)",
@@ -234,7 +234,7 @@ export default function ParticipantLoginPage() {
               id="participant-token"
               type="text"
               className="clay-input"
-              style={{ paddingLeft: "2.5rem", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 700 }}
+              style={{ paddingLeft: "2.4rem", paddingRight: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 700, fontSize: "0.875rem", height: "42px" }}
               placeholder="Contoh: MAPSI2026"
               value={examToken}
               onChange={(e) => setExamToken(e.target.value)}
@@ -247,40 +247,40 @@ export default function ParticipantLoginPage() {
 
         <div
           className="clay-alert clay-alert-info"
-          style={{ marginBottom: "1.5rem", fontSize: "0.8rem" }}
+          style={{ marginBottom: "1.25rem", padding: "0.65rem 0.85rem", fontSize: "0.75rem" }}
         >
-          <span>ℹ️</span>
+          <span style={{ fontSize: "1rem" }}>ℹ️</span>
           <span>
-            Nomor undian dan token diberikan oleh panitia. Hubungi panitia jika belum mendapatkannya.
+            Nomor undian dan token diberikan oleh panitia sebelum ujian dimulai.
           </span>
         </div>
 
         <button
           type="submit"
-          className="clay-btn clay-btn-success clay-btn-lg"
-          style={{ width: "100%", justifyContent: "center" }}
+          className="clay-btn clay-btn-success"
+          style={{ width: "100%", justifyContent: "center", padding: "0.7rem 1.5rem", fontSize: "0.95rem" }}
           disabled={isLoading}
           id="participant-login-submit-btn"
         >
           {isLoading ? (
             <>
-              <span className="clay-spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
+              <span className="clay-spinner" style={{ width: 16, height: 16, borderWidth: 2 }} />
               Memverifikasi...
             </>
           ) : (
             <>
-              <LogIn size={18} />
+              <LogIn size={16} />
               Masuk ke Ujian
             </>
           )}
         </button>
       </form>
 
-      <div className="clay-divider" />
+      <div className="clay-divider" style={{ margin: "1rem 0" }} />
       <div style={{ textAlign: "center" }}>
         <Link
           href="/login"
-          style={{ fontSize: "0.875rem", color: "var(--color-text-muted)", fontWeight: 500, textDecoration: "none" }}
+          style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", fontWeight: 500, textDecoration: "none" }}
         >
           ← Login Admin / Panitia
         </Link>

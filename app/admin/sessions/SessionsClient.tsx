@@ -279,124 +279,145 @@ export function SessionsClient({ initialSessions }: { initialSessions: ExamSessi
             </div>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {sessions.map((session) => (
-              <div key={session.id} className="clay-card" style={{ padding: "1.5rem" }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap" }}>
-                  {/* Main info */}
-                  <div style={{ flex: 1, minWidth: 250 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                      <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.1rem" }}>{session.title}</h3>
-                      <span className={`clay-badge ${STATUS_BADGE[session.status]}`}>
-                        {session.status === "active" && <span className="status-dot status-dot-live" style={{ width: 8, height: 8 }} />}
-                        {STATUS_LABEL[session.status]}
-                      </span>
+              <div key={session.id} className="clay-card" style={{ padding: "1.25rem", width: "100%", boxSizing: "border-box" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  {/* Main info & status */}
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+                    <div style={{ flex: "1 1 240px", minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "0.4rem" }}>
+                        <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.1rem", wordBreak: "break-word" }}>
+                          {session.title}
+                        </h3>
+                        <span className={`clay-badge ${STATUS_BADGE[session.status]}`}>
+                          {session.status === "active" && <span className="status-dot status-dot-live" style={{ width: 8, height: 8 }} />}
+                          {STATUS_LABEL[session.status]}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", gap: "0.85rem 1.25rem", flexWrap: "wrap" }}>
+                        <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+                          📋 {session.stage.replace("_", " ").toUpperCase()}
+                        </span>
+                        <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+                          ⏱️ {session.duration_minutes} menit
+                        </span>
+                        {session.start_time && (
+                          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+                            🕐 {format(new Date(session.start_time), "dd MMM yyyy HH:mm", { locale: id })}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
-                      <span style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-                        📋 {session.stage.replace("_", " ").toUpperCase()}
-                      </span>
-                      <span style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-                        ⏱️ {session.duration_minutes} menit
-                      </span>
-                      {session.start_time && (
-                        <span style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-                          🕐 {format(new Date(session.start_time), "dd MMM yyyy HH:mm", { locale: id })}
+                  </div>
+
+                  {/* Token section and Action buttons in responsive flex wrap */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+                    {/* Token section */}
+                    <div
+                      style={{
+                        background: "var(--color-surface-2)",
+                        borderRadius: "14px",
+                        padding: "0.5rem 0.85rem",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.6rem",
+                        border: `2px solid ${session.token_active ? "var(--color-success-light)" : "var(--color-border)"}`,
+                        maxWidth: "100%",
+                        boxSizing: "border-box",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                        <Key size={15} color={session.token_active ? "var(--color-success)" : "var(--color-text-muted)"} style={{ flexShrink: 0 }} />
+                        <code style={{
+                          fontFamily: "monospace",
+                          fontWeight: 900,
+                          fontSize: "1rem",
+                          letterSpacing: "0.08em",
+                          color: session.token_active ? "var(--color-success)" : "var(--color-text-muted)",
+                          filter: showToken[session.id] ? "none" : "blur(4px)",
+                          userSelect: showToken[session.id] ? "auto" : "none",
+                          transition: "filter 0.2s",
+                        }}>
+                          {session.token}
+                        </code>
+                        <button
+                          type="button"
+                          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)", padding: "2px", display: "flex", alignItems: "center" }}
+                          onClick={() => setShowToken((s) => ({ ...s, [session.id]: !s[session.id] }))}
+                          title={showToken[session.id] ? "Sembunyikan" : "Tampilkan"}
+                        >
+                          {showToken[session.id] ? <EyeOff size={15} /> : <Eye size={15} />}
+                        </button>
+                        <button
+                          type="button"
+                          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)", padding: "2px", display: "flex", alignItems: "center" }}
+                          onClick={() => copyToken(session.token, session.id)}
+                          title="Salin token"
+                          id={`copy-token-${session.id}`}
+                        >
+                          {copied === session.id ? <CheckCircle size={15} color="var(--color-success)" /> : <Copy size={15} />}
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        className={`clay-btn clay-btn-sm ${session.token_active ? "clay-btn-ghost" : "clay-btn-success"}`}
+                        onClick={() => toggleToken(session)}
+                        id={`toggle-token-${session.id}`}
+                        style={{ whiteSpace: "nowrap", padding: "0.3rem 0.75rem", fontSize: "0.78rem" }}
+                      >
+                        {session.token_active ? "Nonaktifkan" : "Aktifkan"}
+                      </button>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap", flexShrink: 0 }}>
+                      {session.status === "scheduled" && (
+                        <button
+                          type="button"
+                          className="clay-btn clay-btn-success clay-btn-sm"
+                          onClick={() => toggleStatus(session, "active")}
+                          id={`start-session-${session.id}`}
+                        >
+                          <Play size={14} /> Mulai
+                        </button>
+                      )}
+                      {session.status === "active" && (
+                        <button
+                          type="button"
+                          className="clay-btn clay-btn-danger clay-btn-sm"
+                          onClick={() => toggleStatus(session, "completed")}
+                          id={`stop-session-${session.id}`}
+                        >
+                          <Square size={14} /> Hentikan
+                        </button>
+                      )}
+                      {session.status === "completed" && (
+                        <span className="clay-badge clay-badge-neutral" style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.78rem" }}>
+                          <Lock size={12} /> Selesai
                         </span>
                       )}
+                      <button
+                        type="button"
+                        className="clay-btn clay-btn-ghost clay-btn-sm"
+                        onClick={() => { setEditTarget(session); setModalOpen(true); }}
+                        id={`edit-session-${session.id}`}
+                        title="Edit sesi"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        className="clay-btn clay-btn-sm"
+                        style={{ background: "var(--color-danger-lighter)", color: "var(--color-danger)", boxShadow: "var(--clay-shadow-sm)" }}
+                        onClick={() => setDeleteTarget(session)}
+                        id={`delete-session-${session.id}`}
+                        title="Hapus sesi"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Token section */}
-                  <div
-                    style={{
-                      background: "var(--color-surface-2)",
-                      borderRadius: "14px",
-                      padding: "0.85rem 1.1rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.75rem",
-                      border: `2px solid ${session.token_active ? "var(--color-success-light)" : "var(--color-border)"}`,
-                    }}
-                  >
-                    <Key size={16} color={session.token_active ? "var(--color-success)" : "var(--color-text-muted)"} />
-                    <code style={{
-                      fontFamily: "monospace",
-                      fontWeight: 900,
-                      fontSize: "1.1rem",
-                      letterSpacing: "0.1em",
-                      color: session.token_active ? "var(--color-success)" : "var(--color-text-muted)",
-                      filter: showToken[session.id] ? "none" : "blur(4px)",
-                      userSelect: showToken[session.id] ? "auto" : "none",
-                      transition: "filter 0.2s",
-                    }}>
-                      {session.token}
-                    </code>
-                    <button
-                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)" }}
-                      onClick={() => setShowToken((s) => ({ ...s, [session.id]: !s[session.id] }))}
-                      title={showToken[session.id] ? "Sembunyikan" : "Tampilkan"}
-                    >
-                      {showToken[session.id] ? <EyeOff size={15} /> : <Eye size={15} />}
-                    </button>
-                    <button
-                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)" }}
-                      onClick={() => copyToken(session.token, session.id)}
-                      title="Salin token"
-                      id={`copy-token-${session.id}`}
-                    >
-                      {copied === session.id ? <CheckCircle size={15} color="var(--color-success)" /> : <Copy size={15} />}
-                    </button>
-                    <button
-                      className={`clay-btn clay-btn-sm ${session.token_active ? "clay-btn-ghost" : "clay-btn-success"}`}
-                      onClick={() => toggleToken(session)}
-                      id={`toggle-token-${session.id}`}
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      {session.token_active ? "Nonaktifkan" : "Aktifkan"}
-                    </button>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
-                    {session.status === "scheduled" && (
-                      <button
-                        className="clay-btn clay-btn-success clay-btn-sm"
-                        onClick={() => toggleStatus(session, "active")}
-                        id={`start-session-${session.id}`}
-                      >
-                        <Play size={14} /> Mulai
-                      </button>
-                    )}
-                    {session.status === "active" && (
-                      <button
-                        className="clay-btn clay-btn-danger clay-btn-sm"
-                        onClick={() => toggleStatus(session, "completed")}
-                        id={`stop-session-${session.id}`}
-                      >
-                        <Square size={14} /> Hentikan
-                      </button>
-                    )}
-                    {session.status === "completed" && (
-                      <span className="clay-badge clay-badge-neutral" style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-                        <Lock size={12} /> Selesai
-                      </span>
-                    )}
-                    <button
-                      className="clay-btn clay-btn-ghost clay-btn-sm"
-                      onClick={() => { setEditTarget(session); setModalOpen(true); }}
-                      id={`edit-session-${session.id}`}
-                    >
-                      <Edit2 size={14} />
-                    </button>
-                    <button
-                      className="clay-btn clay-btn-sm"
-                      style={{ background: "var(--color-danger-lighter)", color: "var(--color-danger)", boxShadow: "var(--clay-shadow-sm)" }}
-                      onClick={() => setDeleteTarget(session)}
-                      id={`delete-session-${session.id}`}
-                    >
-                      <Trash2 size={14} />
-                    </button>
                   </div>
                 </div>
               </div>

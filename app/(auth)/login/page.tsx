@@ -94,33 +94,33 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="clay-card" style={{ padding: "2.5rem 2rem" }}>
+    <div className="clay-card" style={{ padding: "1.75rem 1.75rem", width: "100%", boxSizing: "border-box" }}>
       <h2
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 800,
-          fontSize: "1.35rem",
-          marginBottom: "0.4rem",
+          fontSize: "1.25rem",
+          marginBottom: "0.25rem",
         }}
       >
         Masuk ke Sistem
       </h2>
-      <p style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", marginBottom: "2rem", fontWeight: 500 }}>
+      <p style={{ color: "var(--color-text-muted)", fontSize: "0.825rem", marginBottom: "1.25rem", fontWeight: 500 }}>
         Login untuk Admin & Panitia
       </p>
 
       <form onSubmit={handleSubmit} noValidate>
         {/* Email */}
-        <div className="form-group" style={{ marginBottom: "1.25rem" }}>
-          <label className="form-label" htmlFor="login-email">
+        <div className="form-group" style={{ marginBottom: "1rem" }}>
+          <label className="form-label" htmlFor="login-email" style={{ fontSize: "0.8rem" }}>
             Email
           </label>
           <div style={{ position: "relative" }}>
             <Mail
-              size={16}
+              size={15}
               style={{
                 position: "absolute",
-                left: "0.9rem",
+                left: "0.85rem",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var(--color-text-muted)",
@@ -131,7 +131,7 @@ export default function LoginPage() {
               id="login-email"
               type="email"
               className="clay-input"
-              style={{ paddingLeft: "2.5rem" }}
+              style={{ paddingLeft: "2.4rem", paddingRight: "0.85rem", fontSize: "0.875rem", height: "42px" }}
               placeholder="nama@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -143,16 +143,16 @@ export default function LoginPage() {
         </div>
 
         {/* Password */}
-        <div className="form-group" style={{ marginBottom: "1.75rem" }}>
-          <label className="form-label" htmlFor="login-password">
+        <div className="form-group" style={{ marginBottom: "1.25rem" }}>
+          <label className="form-label" htmlFor="login-password" style={{ fontSize: "0.8rem" }}>
             Password
           </label>
           <div style={{ position: "relative" }}>
             <Lock
-              size={16}
+              size={15}
               style={{
                 position: "absolute",
-                left: "0.9rem",
+                left: "0.85rem",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var(--color-text-muted)",
@@ -163,7 +163,7 @@ export default function LoginPage() {
               id="login-password"
               type={showPassword ? "text" : "password"}
               className="clay-input"
-              style={{ paddingLeft: "2.5rem", paddingRight: "3rem" }}
+              style={{ paddingLeft: "2.4rem", paddingRight: "2.8rem", fontSize: "0.875rem", height: "42px" }}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -175,7 +175,7 @@ export default function LoginPage() {
               onClick={() => setShowPassword(!showPassword)}
               style={{
                 position: "absolute",
-                right: "0.9rem",
+                right: "0.85rem",
                 top: "50%",
                 transform: "translateY(-50%)",
                 background: "none",
@@ -183,10 +183,11 @@ export default function LoginPage() {
                 cursor: "pointer",
                 color: "var(--color-text-muted)",
                 display: "flex",
+                padding: "4px",
               }}
               aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
             >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
           {errors.password && <span className="form-error">{errors.password}</span>}
@@ -194,19 +195,19 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          className="clay-btn clay-btn-primary clay-btn-lg"
-          style={{ width: "100%", justifyContent: "center" }}
+          className="clay-btn clay-btn-primary"
+          style={{ width: "100%", justifyContent: "center", padding: "0.7rem 1.5rem", fontSize: "0.95rem" }}
           disabled={isLoading}
           id="login-submit-btn"
         >
           {isLoading ? (
             <>
-              <span className="clay-spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
+              <span className="clay-spinner" style={{ width: 16, height: 16, borderWidth: 2 }} />
               Memproses...
             </>
           ) : (
             <>
-              <LogIn size={18} />
+              <LogIn size={16} />
               Masuk
             </>
           )}
@@ -214,11 +215,11 @@ export default function LoginPage() {
       </form>
 
       {/* Divider */}
-      <div className="clay-divider" />
+      <div className="clay-divider" style={{ margin: "1rem 0" }} />
 
       {/* Participant link */}
       <div style={{ textAlign: "center" }}>
-        <p style={{ fontSize: "0.875rem", color: "var(--color-text-muted)", fontWeight: 500 }}>
+        <p style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", fontWeight: 500, margin: 0 }}>
           Peserta ujian?{" "}
           <Link
             href="/participant-login"
