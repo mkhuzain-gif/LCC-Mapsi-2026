@@ -130,7 +130,7 @@ export function MonitoringClient({ role, initialData, sessionId }: MonitoringCli
         }
       />
 
-      <div style={{ padding: "1.5rem 2rem" }}>
+      <div className="page-container">
         {/* Live indicator */}
         {sessionId && (
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
@@ -142,31 +142,31 @@ export function MonitoringClient({ role, initialData, sessionId }: MonitoringCli
         )}
 
         {/* Summary KPIs */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+        <div className="grid-stats-5">
           {[
-            { icon: <Users size={22} />, label: "Total", value: summaryStats.total, color: "var(--color-primary)", bg: "var(--color-primary-lighter)" },
-            { icon: <Clock size={22} />, label: "Belum Mulai", value: summaryStats.notStarted, color: "var(--color-text-muted)", bg: "#f3f4f6" },
-            { icon: <Loader2 size={22} />, label: "Mengerjakan", value: summaryStats.inProgress, color: "var(--color-info)", bg: "var(--color-info-lighter)" },
-            { icon: <CheckCircle2 size={22} />, label: "Selesai", value: summaryStats.submitted, color: "var(--color-success)", bg: "var(--color-success-lighter)" },
-            { icon: <AlertTriangle size={22} />, label: "Mencurigakan", value: summaryStats.suspicious, color: "var(--color-danger)", bg: "var(--color-danger-lighter)" },
+            { icon: <Users size={20} />, label: "Total", value: summaryStats.total, color: "var(--color-primary)", bg: "var(--color-primary-lighter)" },
+            { icon: <Clock size={20} />, label: "Belum Mulai", value: summaryStats.notStarted, color: "var(--color-text-muted)", bg: "#f3f4f6" },
+            { icon: <Loader2 size={20} />, label: "Mengerjakan", value: summaryStats.inProgress, color: "var(--color-info)", bg: "var(--color-info-lighter)" },
+            { icon: <CheckCircle2 size={20} />, label: "Selesai", value: summaryStats.submitted, color: "var(--color-success)", bg: "var(--color-success-lighter)" },
+            { icon: <AlertTriangle size={20} />, label: "Mencurigakan", value: summaryStats.suspicious, color: "var(--color-danger)", bg: "var(--color-danger-lighter)" },
           ].map((s) => (
-            <div key={s.label} className="clay-card-sm" style={{ padding: "1rem", textAlign: "center" }}>
-              <div style={{ width: 40, height: 40, borderRadius: "12px", background: s.bg, color: s.color, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.5rem" }}>
+            <div key={s.label} className="clay-card-sm" style={{ padding: "0.85rem 0.5rem", textAlign: "center" }}>
+              <div style={{ width: 34, height: 34, borderRadius: "10px", background: s.bg, color: s.color, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.4rem" }}>
                 {s.icon}
               </div>
-              <div style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "1.4rem", color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--color-text-muted)" }}>{s.label}</div>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "1.3rem", color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: "0.7rem", fontWeight: 600, color: "var(--color-text-muted)" }}>{s.label}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "1.5rem", alignItems: "start" }}>
+        <div className="grid-monitoring-layout">
           {/* Participant Table */}
           <div>
             {/* Filters */}
-            <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}>
-              <input className="clay-input" style={{ flex: 1 }} placeholder="Cari nama atau nomor undian..." value={search} onChange={(e) => setSearch(e.target.value)} id="monitoring-search" />
-              <select className="clay-select" style={{ flex: "0 0 180px" }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} id="monitoring-filter-status">
+            <div className="filter-bar">
+              <input className="clay-input" style={{ flex: "1 1 200px" }} placeholder="Cari nama atau nomor undian..." value={search} onChange={(e) => setSearch(e.target.value)} id="monitoring-search" />
+              <select className="clay-select" style={{ flex: "0 0 160px" }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} id="monitoring-filter-status">
                 <option value="">Semua Status</option>
                 <option value="not_started">Belum Mulai</option>
                 <option value="in_progress">Mengerjakan</option>

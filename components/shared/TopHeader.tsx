@@ -23,59 +23,61 @@ export function TopHeader({ title, subtitle, role, actions }: TopHeaderProps) {
 
   return (
     <header className="clay-header">
-      {/* Mobile Hamburger Button */}
-      <button
-        type="button"
-        onClick={handleToggleSidebar}
-        className="mobile-hamburger-btn"
-        aria-label="Buka Menu Navigasi"
-        id="topheader-menu-btn"
-      >
-        <Menu size={20} color="var(--color-primary)" />
-      </button>
+      <div className="clay-header-top-row">
+        {/* Mobile Hamburger Button */}
+        <button
+          type="button"
+          onClick={handleToggleSidebar}
+          className="mobile-hamburger-btn"
+          aria-label="Buka Menu Navigasi"
+          id="topheader-menu-btn"
+        >
+          <Menu size={20} color="var(--color-primary)" />
+        </button>
 
-      {/* Title */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-          <h1
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "1.15rem",
-              color: "var(--color-text)",
-              margin: 0,
-              lineHeight: 1.2,
-            }}
-          >
-            {title}
-          </h1>
-          <span className={roleBadge.class} style={{ fontSize: "0.72rem", padding: "0.15rem 0.55rem" }}>
-            {roleBadge.label}
-          </span>
+        {/* Title & Badge */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+            <h1
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 800,
+                fontSize: "1.1rem",
+                color: "var(--color-text)",
+                margin: 0,
+                lineHeight: 1.2,
+              }}
+            >
+              {title}
+            </h1>
+            <span className={roleBadge.class} style={{ fontSize: "0.7rem", padding: "0.15rem 0.5rem" }}>
+              {roleBadge.label}
+            </span>
+          </div>
+          {subtitle && (
+            <p className="hide-mobile-subtitle" style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "2px", fontWeight: 500 }}>
+              {subtitle}
+            </p>
+          )}
         </div>
-        {subtitle && (
-          <p className="hide-mobile-subtitle" style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "2px", fontWeight: 500 }}>
-            {subtitle}
-          </p>
-        )}
+
+        {/* Notification bell */}
+        <button
+          id="header-notifications-btn"
+          className="header-bell-btn"
+          aria-label="Notifikasi"
+        >
+          <Bell size={18} color="var(--color-text-muted)" />
+          <span className="header-bell-dot" />
+        </button>
       </div>
 
-      {/* Actions */}
+      {/* Actions (Desktop & Mobile) */}
       {actions && (
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
+        <div className="clay-header-actions" id="topheader-actions">
           {actions}
         </div>
       )}
-
-      {/* Notification bell */}
-      <button
-        id="header-notifications-btn"
-        className="header-bell-btn"
-        aria-label="Notifikasi"
-      >
-        <Bell size={18} color="var(--color-text-muted)" />
-        <span className="header-bell-dot" />
-      </button>
     </header>
   );
 }

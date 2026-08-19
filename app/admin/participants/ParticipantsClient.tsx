@@ -136,7 +136,7 @@ function ParticipantModal({ initial, onClose, onSaved }: ParticipantModalProps) 
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div className="modal-grid-2">
             <div style={{ gridColumn: "1 / -1" }} className="form-group">
               <label className="form-label">Nama Lengkap *</label>
               <input className="clay-input" value={form.full_name} onChange={(e) => set("full_name", e.target.value)} placeholder="Nama lengkap peserta" />
@@ -438,18 +438,10 @@ export function ParticipantsClient({ initialParticipants }: { initialParticipant
 
       <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleImport} style={{ display: "none" }} aria-label="Import file Excel" />
 
-      <div style={{ padding: "1.5rem 2rem" }}>
+      <div className="page-container">
         {/* Filters */}
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            marginBottom: "1.25rem",
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ position: "relative", flex: "1 1 200px", minWidth: 180 }}>
+        <div className="filter-bar">
+          <div style={{ position: "relative", flex: "1 1 200px" }}>
             <Search size={15} style={{ position: "absolute", left: "0.85rem", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)", pointerEvents: "none" }} />
             <input
               className="clay-input"
@@ -461,23 +453,43 @@ export function ParticipantsClient({ initialParticipants }: { initialParticipant
             />
           </div>
 
-          <select className="clay-select" style={{ flex: "0 0 140px" }} value={filterGender} onChange={(e) => { setFilterGender(e.target.value); setPage(1); }} id="participants-filter-gender">
+          <select
+            className="clay-select"
+            style={{ flex: "0 0 130px" }}
+            value={filterGender}
+            onChange={(e) => { setFilterGender(e.target.value); setPage(1); }}
+            id="participants-filter-gender"
+          >
             <option value="">Semua JK</option>
             <option value="male">Putra</option>
             <option value="female">Putri</option>
           </select>
 
-          <select className="clay-select" style={{ flex: "0 0 160px" }} value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }} id="participants-filter-status">
+          <select
+            className="clay-select"
+            style={{ flex: "0 0 140px" }}
+            value={filterStatus}
+            onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }}
+            id="participants-filter-status"
+          >
             <option value="">Semua Status</option>
             <option value="registered">Terdaftar</option>
             <option value="active">Aktif</option>
             <option value="submitted">Selesai</option>
-            <option value="disqualified">Didiskualifikasi</option>
+            <option value="disqualified">Diskualifikasi</option>
           </select>
 
-          <select className="clay-select" style={{ flex: "0 0 150px" }} value={filterStage} onChange={(e) => { setFilterStage(e.target.value); setPage(1); }} id="participants-filter-stage">
+          <select
+            className="clay-select"
+            style={{ flex: "0 0 140px" }}
+            value={filterStage}
+            onChange={(e) => { setFilterStage(e.target.value); setPage(1); }}
+            id="participants-filter-stage"
+          >
             <option value="">Semua Tahap</option>
-            {STAGES.map((s) => <option key={s} value={s}>{s.replace("_", " ").toUpperCase()}</option>)}
+            {STAGES.map((s) => (
+              <option key={s} value={s}>{s.replace("_", " ").toUpperCase()}</option>
+            ))}
           </select>
 
           {(search || filterGender || filterStatus || filterStage) && (

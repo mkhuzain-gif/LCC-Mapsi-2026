@@ -95,7 +95,7 @@ function QuestionModal({ initial, sessions, onClose, onSaved }: QuestionModalPro
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+          <div className="modal-grid-3">
             <div className="form-group">
               <label className="form-label">Mata Pelajaran *</label>
               <select className="clay-select" value={form.subject} onChange={(e) => set("subject", e.target.value)}>
@@ -144,7 +144,7 @@ function QuestionModal({ initial, sessions, onClose, onSaved }: QuestionModalPro
           </div>
 
           {isMC && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+            <div className="modal-grid-2">
               {(["a", "b", "c", "d"] as const).map((opt) => (
                 <div key={opt} className="form-group">
                   <label className="form-label">Pilihan {opt.toUpperCase()}</label>
@@ -415,9 +415,9 @@ export function QuestionsClient({
       />
       <input ref={fileRef} type="file" accept=".json,application/json" onChange={handleImport} style={{ display: "none" }} />
 
-      <div style={{ padding: "1.5rem 2rem" }}>
+      <div className="page-container">
         {/* Stats row */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0.75rem", marginBottom: "1.5rem" }}>
+        <div className="grid-stats-5">
           {[
             { label: "Total Soal", value: questions.length, color: "var(--color-primary)" },
             { label: "PAI", value: paiCount, color: "var(--color-info)" },
@@ -425,15 +425,15 @@ export function QuestionsClient({
             { label: "HOTS", value: questions.filter((q) => q.difficulty === "high").length, color: "var(--color-danger)" },
             { label: "Sedang", value: questions.filter((q) => q.difficulty === "medium").length, color: "var(--color-warning)" },
           ].map((s) => (
-            <div key={s.label} className="clay-card-sm" style={{ padding: "1rem", textAlign: "center" }}>
-              <div style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "1.5rem", color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{s.label}</div>
+            <div key={s.label} className="clay-card-sm" style={{ padding: "0.85rem 0.5rem", textAlign: "center" }}>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "1.4rem", color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Tabs */}
-        <div className="clay-tabs" style={{ marginBottom: "1.25rem", display: "inline-flex" }}>
+        <div className="clay-tabs" style={{ marginBottom: "1.25rem", display: "inline-flex", maxWidth: "100%", overflowX: "auto" }}>
           {(["all", "PAI", "BTQ"] as const).map((t) => (
             <button key={t} className={`clay-tab ${activeTab === t ? "active" : ""}`} onClick={() => setActiveTab(t)} id={`questions-tab-${t}`}>
               {t === "all" ? `Semua (${questions.length})` : t === "PAI" ? `PAI (${paiCount})` : `BTQ (${btqCount})`}
@@ -442,7 +442,7 @@ export function QuestionsClient({
         </div>
 
         {/* Filters */}
-        <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+        <div className="filter-bar">
           <div style={{ position: "relative", flex: "1 1 200px" }}>
             <Search size={15} style={{ position: "absolute", left: "0.85rem", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)", pointerEvents: "none" }} />
             <input className="clay-input" style={{ paddingLeft: "2.4rem" }} placeholder="Cari teks soal..." value={search} onChange={(e) => setSearch(e.target.value)} id="questions-search" />

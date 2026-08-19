@@ -142,7 +142,7 @@ export function SettingsClient({ role }: SettingsClientProps) {
         }
       />
 
-      <div style={{ padding: "1.5rem 2rem", maxWidth: 860 }}>
+      <div className="page-container" style={{ maxWidth: 860 }}>
 
         {/* ======== SECTION: Logo ======== */}
         <div className="clay-card" style={{ marginBottom: "1.5rem", padding: "1.75rem" }}>

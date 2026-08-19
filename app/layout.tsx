@@ -38,12 +38,14 @@ export const metadata: Metadata = {
   // ── Icons ──
   icons: {
     icon: [
-      { url: "/icon-512.jpg", sizes: "512x512", type: "image/jpeg" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/icon-512.jpg", sizes: "512x512" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    shortcut: "/icon-512.jpg",
+    shortcut: "/icon-192.png",
   },
 
   // ── Open Graph (share ke media sosial) ──
@@ -72,16 +74,26 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+
+        {/* Theme Colors */}
+        <meta name="theme-color" content="#6d28d9" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6d28d9" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#4c1d95" />
+
         {/* Apple PWA meta tags tambahan */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="LCC MAPSI" />
-        <link rel="apple-touch-icon" href="/icon-512.jpg" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
         {/* Microsoft PWA */}
         <meta name="msapplication-TileColor" content="#6d28d9" />
-        <meta name="msapplication-TileImage" content="/icon-512.jpg" />
+        <meta name="msapplication-TileImage" content="/icon-512.png" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Prevent phone number detection */}

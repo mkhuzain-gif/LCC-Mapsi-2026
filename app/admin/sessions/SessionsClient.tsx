@@ -104,7 +104,7 @@ function SessionModal({ initial, onClose, onSaved }: SessionModalProps) {
             <input className="clay-input" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Contoh: LCC MAPSI XXVII — Tahap 1" />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+          <div className="modal-grid-2">
             <div className="form-group">
               <label className="form-label">Tahap</label>
               <select className="clay-select" value={form.stage} onChange={(e) => set("stage", e.target.value)}>
@@ -119,7 +119,7 @@ function SessionModal({ initial, onClose, onSaved }: SessionModalProps) {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+          <div className="modal-grid-2">
             <div className="form-group">
               <label className="form-label">Waktu Mulai</label>
               <input className="clay-input" type="datetime-local" value={form.start_time} onChange={(e) => set("start_time", e.target.value)} />
@@ -132,12 +132,12 @@ function SessionModal({ initial, onClose, onSaved }: SessionModalProps) {
 
           <div className="form-group" style={{ marginBottom: "1rem" }}>
             <label className="form-label">Token Ujian *</label>
-            <div style={{ display: "flex", gap: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               <input
                 className="clay-input"
                 value={form.token}
                 onChange={(e) => set("token", e.target.value.toUpperCase())}
-                style={{ fontFamily: "monospace", fontWeight: 800, letterSpacing: "0.1em" }}
+                style={{ fontFamily: "monospace", fontWeight: 800, letterSpacing: "0.1em", flex: 1, minWidth: 140 }}
                 placeholder="TOKEN"
               />
               <button type="button" className="clay-btn clay-btn-ghost clay-btn-sm" onClick={() => set("token", generateToken())} style={{ flexShrink: 0, whiteSpace: "nowrap" }}>
@@ -268,7 +268,7 @@ export function SessionsClient({ initialSessions }: { initialSessions: ExamSessi
         }
       />
 
-      <div style={{ padding: "1.5rem 2rem" }}>
+      <div className="page-container">
         {sessions.length === 0 ? (
           <div className="clay-card" style={{ padding: "4rem 2rem" }}>
             <div className="clay-empty-state">

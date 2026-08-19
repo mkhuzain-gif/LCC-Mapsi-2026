@@ -66,7 +66,7 @@ function SignaturesModal({ initial, onClose, onSave }: SignaturesModalProps) {
         </div>
 
         <form onSubmit={handleSave}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div className="modal-grid-2" style={{ marginBottom: "1.5rem" }}>
             {/* Dewan Juri I */}
             <div style={{ gridColumn: "1 / -1", fontWeight: 800, color: "var(--color-primary)", borderBottom: "1px solid var(--color-surface-2)", paddingBottom: "0.25rem" }}>
               Dewan Juri I
@@ -269,7 +269,7 @@ export function ResultsClient({ sessions, submissions, participants, role }: Res
         }
       />
 
-      <div style={{ padding: "1.5rem 2rem" }}>
+      <div className="page-container">
         {/* Session selector */}
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
           <label className="form-label" style={{ margin: 0, whiteSpace: "nowrap" }}>Pilih Sesi:</label>

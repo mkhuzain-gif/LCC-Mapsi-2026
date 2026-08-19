@@ -50,10 +50,16 @@ export function PWAInstallPrompt() {
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setTimeout(() => setShowBanner(true), 2000);
+      setShowBanner(true);
+    };
+
+    const handleManualPrompt = () => {
+      setShowBanner(true);
+      if (iOS) setShowIOSInstructions(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
+    window.addEventListener("mapsi_trigger_pwa_install", handleManualPrompt);
     window.addEventListener("appinstalled", () => {
       setIsInstalled(true);
       setShowBanner(false);
@@ -62,8 +68,9 @@ export function PWAInstallPrompt() {
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+      window.removeEventListener("mapsi_trigger_pwa_install", handleManualPrompt);
     };
-  }, []);
+  }, [isIOS]);
 
   const handleInstall = async () => {
     if (isIOS) {

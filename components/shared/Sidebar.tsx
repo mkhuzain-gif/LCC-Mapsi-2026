@@ -252,6 +252,28 @@ export function Sidebar({ role, userName }: SidebarProps) {
           </div>
         )}
 
+        {/* Install PWA Button */}
+        <button
+          className="clay-nav-item"
+          style={{
+            width: "100%",
+            justifyContent: collapsed ? "center" : "flex-start",
+            color: "var(--color-primary)",
+            border: "none",
+            background: "none",
+            marginBottom: "0.25rem",
+          }}
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent("mapsi_trigger_pwa_install"));
+            setMobileOpen(false);
+          }}
+          title={collapsed ? "Install Aplikasi" : undefined}
+          id="sidebar-install-pwa-btn"
+        >
+          <span style={{ fontSize: "1.1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>📲</span>
+          {!collapsed && <span>Install Aplikasi</span>}
+        </button>
+
         {/* Logout button */}
         <button
           className="clay-nav-item"
