@@ -1,17 +1,17 @@
 // ============================================================
 // LCC MAPSI XXVII 2026 — Service Worker (PWA)
-// Strategi: Cache-First untuk aset statis, Network-First untuk API
+// Strategi: Cache-First untuk aset statis, Network-First untuk Navigasi & API
 // ============================================================
 
-const CACHE_NAME = "lcc-mapsi-v1";
-const STATIC_CACHE = "lcc-mapsi-static-v1";
-const DYNAMIC_CACHE = "lcc-mapsi-dynamic-v1";
+const STATIC_CACHE = "lcc-mapsi-static-v3";
+const DYNAMIC_CACHE = "lcc-mapsi-dynamic-v3";
 
 // Aset statis yang di-cache saat install
 const STATIC_ASSETS = [
-  "/",
   "/manifest.json",
-  "/icon-512.jpg",
+  "/favicon.ico",
+  "/icon-192.png",
+  "/icon-512.png",
   "/offline.html",
 ];
 
@@ -27,8 +27,8 @@ const NETWORK_ONLY_PATTERNS = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {
-        // Jika offline.html belum ada, lanjutkan saja
+      return cache.addAll(STATIC_ASSETS).catch((err) => {
+        console.warn("[SW] Pre-cache warning:", err);
       });
     })
   );
@@ -71,7 +71,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Aset lain (gambar, font) → Stale-While-Revalidate
+  // Aset lain (gambar, font, manifest) → Stale-While-Revalidate
   event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
 });
 
@@ -104,10 +104,13 @@ async function networkFirstWithOfflineFallback(request) {
     const cached = await caches.match(request);
     if (cached) return cached;
     const offlinePage = await caches.match("/offline.html");
-    return offlinePage || new Response("Tidak ada koneksi internet.", {
-      status: 503,
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    return (
+      offlinePage ||
+      new Response("Tidak ada koneksi internet.", {
+        status: 503,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      })
+    );
   }
 }
 
@@ -129,7 +132,7 @@ self.addEventListener("push", (event) => {
   const title = data.title || "LCC MAPSI";
   const options = {
     body: data.body || "Ada notifikasi baru dari LCC MAPSI.",
-    icon: "/icon-512.jpg",
+    icon: "/icon-192.png",
     badge: "/icon-192.png",
     vibrate: [100, 50, 100],
     data: { url: data.url || "/" },

@@ -4,7 +4,7 @@ import { ToastProvider } from "@/components/shared/ToastProvider";
 import { ServiceWorkerRegistration } from "@/components/shared/ServiceWorkerRegistration";
 import { PWAInstallPrompt } from "@/components/shared/PWAInstallPrompt";
 
-// ─── Viewport (terpisah dari metadata per Next.js 16) ───────
+// ─── Viewport (Next.js 14/15/16) ──────────────────────────────
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   // ── Icons ──
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
@@ -45,10 +46,10 @@ export const metadata: Metadata = {
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    shortcut: "/icon-192.png",
+    shortcut: "/favicon.ico",
   },
 
-  // ── Open Graph (share ke media sosial) ──
+  // ── Open Graph ──
   openGraph: {
     title: "LCC MAPSI XXVII 2026",
     description: "Sistem Ujian Online Lomba Cerdas Cermat MAPSI — PAI & BTQ",
@@ -74,15 +75,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        {/* PWA Manifest */}
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* Theme Colors */}
-        <meta name="theme-color" content="#6d28d9" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6d28d9" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#4c1d95" />
-
-        {/* Apple PWA meta tags tambahan */}
+        {/* Apple & Microsoft PWA Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -91,12 +84,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
-        {/* Microsoft PWA */}
         <meta name="msapplication-TileColor" content="#6d28d9" />
         <meta name="msapplication-TileImage" content="/icon-512.png" />
         <meta name="msapplication-tap-highlight" content="no" />
 
-        {/* Prevent phone number detection */}
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body>

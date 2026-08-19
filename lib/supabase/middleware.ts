@@ -29,12 +29,33 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  const { pathname } = request.nextUrl;
+
+  // Immediately skip middleware processing for static and PWA assets
+  if (
+    pathname === "/manifest.json" ||
+    pathname === "/manifest.webmanifest" ||
+    pathname === "/sw.js" ||
+    pathname === "/offline.html" ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
+    pathname.startsWith("/icons/") ||
+    pathname.endsWith(".png") ||
+    pathname.endsWith(".jpg") ||
+    pathname.endsWith(".jpeg") ||
+    pathname.endsWith(".svg") ||
+    pathname.endsWith(".ico") ||
+    pathname.endsWith(".js") ||
+    pathname.endsWith(".json")
+  ) {
+    return NextResponse.next({ request });
+  }
+
   // Refresh session
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   // Public or token-authenticated paths (participant login and exam interface)
   const isPublicPath =

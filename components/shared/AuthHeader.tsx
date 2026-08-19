@@ -125,16 +125,38 @@ export function AuthFooter() {
   const eventYear = config?.eventYear || "2026";
 
   return (
-    <p
-      style={{
-        textAlign: "center",
-        marginTop: "1.5rem",
-        fontSize: "0.8rem",
-        color: "var(--color-text-light)",
-        fontWeight: 500,
-      }}
-    >
-      © {eventYear} Panitia MAPSI {edition}. All rights reserved.
-    </p>
+    <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new CustomEvent("mapsi_trigger_pwa_install"))}
+        style={{
+          background: "rgba(109,40,217,0.08)",
+          color: "var(--color-primary)",
+          border: "1px solid rgba(109,40,217,0.2)",
+          padding: "0.45rem 1rem",
+          borderRadius: "99px",
+          fontSize: "0.78rem",
+          fontWeight: 700,
+          cursor: "pointer",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.4rem",
+          marginBottom: "0.75rem",
+          transition: "all 0.2s",
+        }}
+        id="auth-pwa-install-trigger"
+      >
+        <span>📲</span> Install Aplikasi LCC MAPSI
+      </button>
+      <p
+        style={{
+          fontSize: "0.8rem",
+          color: "var(--color-text-light)",
+          fontWeight: 500,
+        }}
+      >
+        © {eventYear} Panitia MAPSI {edition}. All rights reserved.
+      </p>
+    </div>
   );
 }
