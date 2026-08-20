@@ -11,7 +11,8 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import type { Question, ExamSubmission } from "@/lib/types/database";
 import {
   Clock, ChevronLeft, ChevronRight, Send,
-  Maximize2, AlertTriangle, Save, Flag, CheckCircle,
+  Maximize2, Flag, CheckCircle, LayoutGrid,
+  X, Check, AlertCircle, Sparkles,
 } from "lucide-react";
 
 interface ExamInterfaceProps {
@@ -58,8 +59,11 @@ export function ExamInterface({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Map<string, string | null>>(new Map(existingAnswers));
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showNavModal, setShowNavModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(submission.status === "submitted" || submission.status === "auto_submitted");
+  const [hasSubmitted, setHasSubmitted] = useState(
+    submission.status === "submitted" || submission.status === "auto_submitted"
+  );
   const [violationWarning, setViolationWarning] = useState<string | null>(null);
 
   const { saveAnswer, saveAllImmediately, status: saveStatus } = useAutosave({
@@ -112,6 +116,7 @@ export function ExamInterface({
   const currentQuestion = orderedQuestions[currentIdx];
   const answeredCount = Array.from(answers.values()).filter((v) => v !== null && v !== undefined).length;
   const unansweredCount = orderedQuestions.length - answeredCount;
+  const isLastQuestion = currentIdx === orderedQuestions.length - 1;
 
   const handleAnswer = (questionId: string, answer: string) => {
     if (hasSubmitted) return;
@@ -209,9 +214,7 @@ export function ExamInterface({
     setTimeout(() => router.push("/exam/result"), 2000);
   };
 
-  // =============================================
-  // Render options for current question
-  // =============================================
+  // Render question options
   const renderOptions = () => {
     if (!currentQuestion) return null;
     const q = currentQuestion;
@@ -219,42 +222,63 @@ export function ExamInterface({
 
     if (q.question_type === "true_false") {
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", width: "100%" }}>
           {[
-            { value: "True", label: "✅  Benar" },
-            { value: "False", label: "❌  Salah" },
-          ].map((opt) => (
-            <div
-              key={opt.value}
-              className={`clay-option ${selectedAnswer === opt.value ? "selected" : ""}`}
-              onClick={() => handleAnswer(q.id, opt.value)}
-              role="radio"
-              aria-checked={selectedAnswer === opt.value}
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && handleAnswer(q.id, opt.value)}
-              id={`option-${opt.value}`}
-            >
-              <div style={{
-                width: 24,
-                height: 24,
-                borderRadius: "50%",
-                border: `3px solid ${selectedAnswer === opt.value ? "var(--color-primary)" : "var(--color-border)"}`,
-                background: selectedAnswer === opt.value ? "var(--color-primary)" : "white",
-                flexShrink: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-                {selectedAnswer === opt.value && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "white" }} />}
+            { value: "True", label: "Benar" },
+            { value: "False", label: "Salah" },
+          ].map((opt) => {
+            const isSelected = selectedAnswer === opt.value;
+            return (
+              <div
+                key={opt.value}
+                className={`clay-option ${isSelected ? "selected" : ""}`}
+                onClick={() => handleAnswer(q.id, opt.value)}
+                role="radio"
+                aria-checked={isSelected}
+                tabIndex={0}
+                style={{
+                  padding: "1rem 1.25rem",
+                  borderRadius: "16px",
+                  border: `2px solid ${isSelected ? "var(--color-primary)" : "var(--color-border)"}`,
+                  background: isSelected
+                    ? "linear-gradient(135deg, var(--color-primary-lighter), #ede9fe)"
+                    : "var(--color-surface)",
+                  boxShadow: isSelected ? "var(--clay-shadow-sm)" : "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                }}
+              >
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    border: `2.5px solid ${isSelected ? "var(--color-primary)" : "var(--color-border)"}`,
+                    background: isSelected ? "var(--color-primary)" : "white",
+                    flexShrink: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {isSelected && <Check size={18} strokeWidth={3} />}
+                </div>
+                <span style={{ fontWeight: 700, fontSize: "1.05rem", color: isSelected ? "var(--color-primary-dark)" : "var(--color-text)" }}>
+                  {opt.value === "True" ? "✅  Benar" : "❌  Salah"}
+                </span>
               </div>
-              <span style={{ fontWeight: 700, fontSize: "1rem" }}>{opt.label}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       );
     }
 
-    // Multiple choice
+    // Multiple Choice
     const opts = [
       { key: "A", value: q.option_a },
       { key: "B", value: q.option_b },
@@ -263,41 +287,77 @@ export function ExamInterface({
     ].filter((o) => o.value);
 
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-        {opts.map((opt) => (
-          <div
-            key={opt.key}
-            className={`clay-option ${selectedAnswer === opt.key ? "selected" : ""}`}
-            onClick={() => handleAnswer(q.id, opt.key)}
-            role="radio"
-            aria-checked={selectedAnswer === opt.key}
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && handleAnswer(q.id, opt.key)}
-            id={`option-${opt.key}`}
-          >
-            <div style={{
-              width: 32,
-              height: 32,
-              borderRadius: "10px",
-              background: selectedAnswer === opt.key
-                ? "var(--color-primary)"
-                : "var(--color-surface-2)",
-              color: selectedAnswer === opt.key ? "white" : "var(--color-text-muted)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "var(--font-display)",
-              fontWeight: 900,
-              fontSize: "0.9rem",
-              flexShrink: 0,
-              boxShadow: "var(--clay-shadow-sm)",
-              transition: "var(--transition-spring)",
-            }}>
-              {opt.key}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", width: "100%" }}>
+        {opts.map((opt) => {
+          const isSelected = selectedAnswer === opt.key;
+          return (
+            <div
+              key={opt.key}
+              className={`clay-option ${isSelected ? "selected" : ""}`}
+              onClick={() => handleAnswer(q.id, opt.key)}
+              role="radio"
+              aria-checked={isSelected}
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && handleAnswer(q.id, opt.key)}
+              id={`option-${opt.key}`}
+              style={{
+                padding: "0.95rem 1.15rem",
+                borderRadius: "16px",
+                border: `2px solid ${isSelected ? "var(--color-primary)" : "var(--color-border)"}`,
+                background: isSelected
+                  ? "linear-gradient(135deg, #ede9fe, #ddd6fe)"
+                  : "var(--color-surface)",
+                boxShadow: isSelected ? "var(--clay-shadow-sm)" : "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+                transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                minHeight: "54px",
+                boxSizing: "border-box",
+              }}
+            >
+              {/* Option Letter Badge */}
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "12px",
+                  background: isSelected
+                    ? "linear-gradient(135deg, var(--color-primary-light), var(--color-primary))"
+                    : "var(--color-surface-2)",
+                  color: isSelected ? "white" : "var(--color-primary)",
+                  border: `1.5px solid ${isSelected ? "transparent" : "var(--color-primary-lighter)"}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 900,
+                  fontSize: "1rem",
+                  flexShrink: 0,
+                  boxShadow: isSelected ? "0 4px 12px rgba(109,40,217,0.3)" : "var(--clay-shadow-sm)",
+                  transition: "all 0.2s",
+                }}
+              >
+                {opt.key}
+              </div>
+
+              {/* Option Text */}
+              <span
+                style={{
+                  fontWeight: isSelected ? 700 : 600,
+                  fontSize: "1rem",
+                  lineHeight: 1.55,
+                  color: isSelected ? "var(--color-primary-dark)" : "var(--color-text)",
+                  flex: 1,
+                  wordBreak: "break-word",
+                }}
+              >
+                {opt.value}
+              </span>
             </div>
-            <span style={{ fontWeight: 600, lineHeight: 1.5 }}>{opt.value}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   };
@@ -336,178 +396,204 @@ export function ExamInterface({
           fontWeight: 800,
           fontSize: "0.9rem",
           animation: "slideDown 0.3s ease",
+          boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
         }}>
           {violationWarning}
         </div>
       )}
 
-      {/* Top Bar */}
-      <div style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: "rgba(255, 255, 255, 0.95)",
-        backdropFilter: "blur(20px)",
-        borderBottom: `3px solid ${isCritical ? "var(--color-danger)" : isWarning ? "var(--color-warning)" : "var(--color-primary-lighter)"}`,
-        padding: "0.75rem 1.5rem",
-        display: "flex",
-        alignItems: "center",
-        gap: "1rem",
-        boxShadow: "0 2px 16px rgba(109,40,217,0.1)",
-        flexWrap: "wrap",
-      }}>
-        {/* Participant info */}
-        <div style={{ flex: 1, minWidth: 150 }}>
-          <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "0.9rem" }}>{participantName}</div>
-          <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-            No. Undian: <strong>{drawNumber}</strong>
+      {/* ============================================================ */}
+      {/* TOP HEADER */}
+      {/* ============================================================ */}
+      <header
+        className="exam-header"
+        style={{
+          borderBottom: `3px solid ${isCritical ? "var(--color-danger)" : isWarning ? "var(--color-warning)" : "var(--color-primary-lighter)"}`,
+        }}
+      >
+        {/* Left: Participant Name & Draw Number */}
+        <div style={{ minWidth: 0, flex: "1 1 auto" }}>
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 800,
+              fontSize: "0.95rem",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              color: "var(--color-text)",
+            }}
+          >
+            {participantName}
+          </div>
+          <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+            No. Undian: <strong style={{ color: "var(--color-primary)" }}>{drawNumber}</strong>
           </div>
         </div>
 
-        {/* Progress */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-            {answeredCount}/{orderedQuestions.length} dijawab
-          </span>
-          <div className="clay-progress" style={{ width: 100, height: 8 }}>
-            <div
-              className="clay-progress-bar"
-              style={{
-                width: `${(answeredCount / orderedQuestions.length) * 100}%`,
-                background: "linear-gradient(90deg, var(--color-success-light), var(--color-success))",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Timer */}
+        {/* Center: Timer */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.5rem 1rem",
+            gap: "0.45rem",
+            padding: "0.4rem 0.85rem",
             borderRadius: "12px",
             background: isCritical ? "var(--color-danger-lighter)" : isWarning ? "var(--color-warning-lighter)" : "var(--color-success-lighter)",
             boxShadow: "var(--clay-shadow-sm)",
+            flexShrink: 0,
           }}
         >
-          <Clock size={18} color={isCritical ? "var(--color-danger)" : isWarning ? "var(--color-warning)" : "var(--color-success)"} />
+          <Clock size={16} color={isCritical ? "var(--color-danger)" : isWarning ? "var(--color-warning)" : "var(--color-success)"} />
           <span
             className={`clay-timer ${isCritical ? "clay-timer-critical" : isWarning ? "clay-timer-warning" : "clay-timer-normal"}`}
-            style={{ fontSize: "1.4rem" }}
+            style={{ fontSize: "1.25rem", lineHeight: 1 }}
           >
             {display}
           </span>
         </div>
 
-        {/* Autosave status */}
-        <div className={`clay-autosave ${
-          saveStatus === "saving" ? "clay-autosave-saving" :
-          saveStatus === "saved" ? "clay-autosave-saved" :
-          saveStatus === "error" ? "clay-autosave-error" :
-          "clay-autosave-saved"
-        }`} style={{ display: saveStatus !== "idle" ? "flex" : "none" }}>
-          {saveStatus === "saving" ? "💾 Menyimpan..." : saveStatus === "saved" ? "✓ Tersimpan" : "⚠️ Gagal simpan"}
-        </div>
-
-        {/* Fullscreen & Submit */}
-        <button className="clay-btn clay-btn-ghost clay-btn-sm" onClick={enterFullscreen} title="Layar Penuh">
-          <Maximize2 size={15} />
-        </button>
-
-        <button
-          className="clay-btn clay-btn-primary"
-          onClick={() => setShowSubmitConfirm(true)}
-          disabled={isSubmitting}
-          id="exam-submit-btn"
-        >
-          <Send size={15} /> Kumpulkan
-        </button>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ display: "flex", gap: 0, maxHeight: "calc(100vh - 80px)", overflow: "hidden" }}>
-        {/* Question Area */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem 2rem" }}>
-          {/* Subject badge */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
-            <span className={`clay-badge ${currentQuestion?.subject === "PAI" ? "clay-badge-info" : "clay-badge-secondary"}`} style={{ fontSize: "0.8rem" }}>
-              {currentQuestion?.subject}
-            </span>
-            <span className={`clay-badge ${
-              currentQuestion?.difficulty === "high" ? "clay-badge-danger" :
-              currentQuestion?.difficulty === "medium" ? "clay-badge-warning" :
-              "clay-badge-success"
-            }`} style={{ fontSize: "0.8rem" }}>
-              {currentQuestion?.difficulty === "high" ? "HOTS" : currentQuestion?.difficulty === "medium" ? "Sedang" : "Mudah"}
-            </span>
-            <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600, marginLeft: "auto" }}>
-              Soal {currentIdx + 1} dari {orderedQuestions.length}
-            </span>
+        {/* Right Actions */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexShrink: 0 }}>
+          {/* Autosave badge (desktop) */}
+          <div
+            className={`clay-autosave hide-mobile ${
+              saveStatus === "saving" ? "clay-autosave-saving" : "clay-autosave-saved"
+            }`}
+            style={{ display: saveStatus !== "idle" ? "flex" : "none", padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}
+          >
+            {saveStatus === "saving" ? "💾 Menyimpan..." : "✓ Tersimpan"}
           </div>
 
-          {/* Question card */}
-          <div className="clay-question-card" style={{ marginBottom: "1.5rem", userSelect: "none" }}>
-            <p style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: "1.05rem",
-              lineHeight: 1.7,
-              marginBottom: "0.5rem",
-            }}>
-              {currentIdx + 1}. {currentQuestion?.question_text}
-            </p>
+          {/* Fullscreen Button */}
+          <button
+            type="button"
+            className="clay-btn clay-btn-ghost clay-btn-sm"
+            onClick={enterFullscreen}
+            title="Layar Penuh"
+            style={{ padding: "0.4rem 0.6rem" }}
+          >
+            <Maximize2 size={15} />
+          </button>
+
+          {/* Kumpulkan Button */}
+          <button
+            type="button"
+            className="clay-btn clay-btn-primary clay-btn-sm"
+            onClick={() => setShowSubmitConfirm(true)}
+            disabled={isSubmitting}
+            id="exam-top-submit-btn"
+            style={{ padding: "0.45rem 0.85rem", fontSize: "0.82rem" }}
+          >
+            <Send size={14} /> Kumpulkan
+          </button>
+        </div>
+      </header>
+
+      {/* ============================================================ */}
+      {/* EXAM BODY */}
+      {/* ============================================================ */}
+      <div className="exam-body">
+        {/* Question Column (FULL WIDTH on Mobile) */}
+        <main className="exam-question-column">
+          {/* Meta Info: Subject, Difficulty, & Question Counter */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "0.5rem",
+              marginBottom: "1rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              <span
+                className={`clay-badge ${currentQuestion?.subject === "PAI" ? "clay-badge-info" : "clay-badge-secondary"}`}
+                style={{ fontSize: "0.8rem", padding: "0.25rem 0.75rem" }}
+              >
+                {currentQuestion?.subject || "PAI"}
+              </span>
+              <span
+                className={`clay-badge ${
+                  currentQuestion?.difficulty === "high" ? "clay-badge-danger" :
+                  currentQuestion?.difficulty === "medium" ? "clay-badge-warning" :
+                  "clay-badge-success"
+                }`}
+                style={{ fontSize: "0.8rem", padding: "0.25rem 0.75rem" }}
+              >
+                {currentQuestion?.difficulty === "high" ? "HOTS" : currentQuestion?.difficulty === "medium" ? "Sedang" : "Mudah"}
+              </span>
+            </div>
+
+            <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--color-primary)" }}>
+              Soal {currentIdx + 1} <span style={{ color: "var(--color-text-muted)", fontWeight: 500 }}>/ {orderedQuestions.length}</span>
+            </div>
+          </div>
+
+          {/* Question Card (Large, High Contrast, Very Legible) */}
+          <div
+            className="clay-card"
+            style={{
+              padding: "1.5rem 1.5rem",
+              marginBottom: "1.25rem",
+              userSelect: "none",
+              background: "white",
+              border: "2px solid rgba(255,255,255,0.9)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                lineHeight: 1.75,
+                color: "var(--color-text)",
+                wordBreak: "break-word",
+              }}
+            >
+              <span style={{ color: "var(--color-primary)", fontWeight: 900, marginRight: "0.35rem" }}>
+                {currentIdx + 1}.
+              </span>
+              {currentQuestion?.question_text}
+            </div>
+
+            {/* Optional Image */}
+            {currentQuestion?.image_url && (
+              <div style={{ marginTop: "1rem", borderRadius: "14px", overflow: "hidden", border: "1.5px solid var(--color-border)" }}>
+                <img
+                  src={currentQuestion.image_url}
+                  alt={`Soal ${currentIdx + 1}`}
+                  style={{ width: "100%", maxHeight: 320, objectFit: "contain", background: "#f8f5ff" }}
+                />
+              </div>
+            )}
           </div>
 
           {/* Options */}
-          <div style={{ marginBottom: "2rem" }}>
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-text-muted)", marginBottom: "0.6rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              Pilih Jawaban:
+            </div>
             {renderOptions()}
           </div>
+        </main>
 
-          {/* Navigation */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <button
-              className="clay-btn clay-btn-ghost"
-              onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
-              disabled={currentIdx === 0}
-              id="exam-prev-btn"
-            >
-              <ChevronLeft size={18} /> Sebelumnya
-            </button>
-            <button
-              className="clay-btn clay-btn-primary"
-              onClick={() => setCurrentIdx((i) => Math.min(orderedQuestions.length - 1, i + 1))}
-              disabled={currentIdx === orderedQuestions.length - 1}
-              id="exam-next-btn"
-            >
-              Berikutnya <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-
-        {/* Question Navigator Sidebar */}
-        <div style={{
-          width: 200,
-          background: "var(--color-surface)",
-          borderLeft: "2px solid var(--color-border)",
-          overflowY: "auto",
-          padding: "1rem",
-          flexShrink: 0,
-        }}>
-          <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "var(--color-text-muted)", marginBottom: "0.75rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-            Navigator Soal
+        {/* Desktop Question Navigator Sidebar (>= 1024px) */}
+        <aside className="exam-sidebar-column">
+          <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--color-primary-dark)", marginBottom: "0.75rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+            Navigator Soal ({orderedQuestions.length})
           </div>
 
           {/* Legend */}
-          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.75rem", fontSize: "0.72rem", fontWeight: 600, flexWrap: "wrap" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: "3px", color: "var(--color-text-muted)" }}>
-              <div style={{ width: 10, height: 10, borderRadius: "3px", background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }} />
-              Belum
+          <div style={{ display: "flex", gap: "0.6rem", marginBottom: "0.85rem", fontSize: "0.75rem", fontWeight: 600 }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px", color: "var(--color-text-muted)" }}>
+              <div style={{ width: 12, height: 12, borderRadius: "4px", background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }} />
+              Belum ({unansweredCount})
             </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "3px", color: "var(--color-success)" }}>
-              <div style={{ width: 10, height: 10, borderRadius: "3px", background: "var(--color-success)" }} />
-              Dijawab
+            <span style={{ display: "flex", alignItems: "center", gap: "4px", color: "var(--color-success)" }}>
+              <div style={{ width: 12, height: 12, borderRadius: "4px", background: "var(--color-success)" }} />
+              Dijawab ({answeredCount})
             </span>
           </div>
 
@@ -518,6 +604,7 @@ export function ExamInterface({
               return (
                 <button
                   key={q.id}
+                  type="button"
                   className={`clay-q-nav-btn ${isCurrent ? "current" : isAnswered ? "answered" : "unanswered"}`}
                   onClick={() => setCurrentIdx(idx)}
                   id={`nav-q-${idx + 1}`}
@@ -528,39 +615,217 @@ export function ExamInterface({
               );
             })}
           </div>
-
-          <div className="clay-divider" />
-
-          <div style={{ fontSize: "0.78rem", fontWeight: 600 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.25rem 0", color: "var(--color-success)" }}>
-              <span>Dijawab:</span>
-              <strong>{answeredCount}</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.25rem 0", color: "var(--color-warning)" }}>
-              <span>Belum:</span>
-              <strong>{unansweredCount}</strong>
-            </div>
-          </div>
-
-          {unansweredCount > 0 && (
-            <div style={{ marginTop: "0.75rem", padding: "0.6rem", background: "var(--color-warning-lighter)", borderRadius: "10px", fontSize: "0.75rem", fontWeight: 600, color: "var(--color-warning)", textAlign: "center" }}>
-              <Flag size={13} style={{ display: "inline", marginRight: "4px" }} />
-              {unansweredCount} soal belum dijawab
-            </div>
-          )}
-        </div>
+        </aside>
       </div>
 
-      {/* Submit Confirmation */}
+      {/* ============================================================ */}
+      {/* STICKY BOTTOM ACTION BAR (EXTRA COMFORTABLE ON MOBILE) */}
+      {/* ============================================================ */}
+      <footer className="exam-bottom-bar">
+        {/* Tombol Sebelumnya */}
+        <button
+          type="button"
+          className="clay-btn clay-btn-ghost"
+          onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
+          disabled={currentIdx === 0}
+          id="exam-prev-btn"
+          style={{
+            flex: "1 1 0",
+            maxWidth: 160,
+            padding: "0.75rem 1rem",
+            fontSize: "0.92rem",
+            minHeight: "46px",
+          }}
+        >
+          <ChevronLeft size={18} /> Sebelumnya
+        </button>
+
+        {/* Tombol Daftar Soal Modal (Tengah) */}
+        <button
+          type="button"
+          className="clay-btn clay-btn-ghost"
+          onClick={() => setShowNavModal(true)}
+          style={{
+            padding: "0.75rem 0.85rem",
+            fontSize: "0.85rem",
+            fontWeight: 800,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            minHeight: "46px",
+            background: "var(--color-surface)",
+          }}
+          id="open-nav-modal-btn"
+        >
+          <LayoutGrid size={16} color="var(--color-primary)" />
+          <span>Soal {currentIdx + 1}/{orderedQuestions.length}</span>
+        </button>
+
+        {/* Tombol Selanjutnya / Selesai */}
+        {isLastQuestion ? (
+          <button
+            type="button"
+            className="clay-btn clay-btn-success"
+            onClick={() => setShowSubmitConfirm(true)}
+            id="exam-finish-btn"
+            style={{
+              flex: "1 1 0",
+              maxWidth: 180,
+              padding: "0.75rem 1rem",
+              fontSize: "0.92rem",
+              fontWeight: 800,
+              minHeight: "46px",
+            }}
+          >
+            <Send size={16} /> Kumpulkan
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="clay-btn clay-btn-primary"
+            onClick={() => setCurrentIdx((i) => Math.min(orderedQuestions.length - 1, i + 1))}
+            id="exam-next-btn"
+            style={{
+              flex: "1 1 0",
+              maxWidth: 160,
+              padding: "0.75rem 1rem",
+              fontSize: "0.92rem",
+              fontWeight: 800,
+              minHeight: "46px",
+            }}
+          >
+            Berikutnya <ChevronRight size={18} />
+          </button>
+        )}
+      </footer>
+
+      {/* ============================================================ */}
+      {/* MODAL / BOTTOM SHEET: DAFTAR SEMUA SOAL */}
+      {/* ============================================================ */}
+      {showNavModal && (
+        <div className="clay-modal-overlay" onClick={() => setShowNavModal(false)}>
+          <div
+            className="clay-modal"
+            style={{
+              maxWidth: 480,
+              padding: "1.5rem",
+              maxHeight: "85vh",
+              overflowY: "auto",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <LayoutGrid size={20} color="var(--color-primary)" />
+                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.1rem", margin: 0 }}>
+                  Daftar Nomor Soal
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowNavModal(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "var(--color-text-muted)",
+                  padding: "4px",
+                  display: "flex",
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Summary Counters */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.6rem",
+                marginBottom: "1.25rem",
+                padding: "0.75rem",
+                borderRadius: "14px",
+                background: "var(--color-surface-2)",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "var(--color-success)" }}>
+                  {answeredCount}
+                </div>
+                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
+                  Sudah Dijawab
+                </div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "var(--color-warning)" }}>
+                  {unansweredCount}
+                </div>
+                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
+                  Belum Dijawab
+                </div>
+              </div>
+            </div>
+
+            {/* Grid Numbers (6 Columns on mobile) */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                gap: "8px",
+                marginBottom: "1.25rem",
+              }}
+            >
+              {orderedQuestions.map((q, idx) => {
+                const isAnswered = !!(answers.get(q.id));
+                const isCurrent = idx === currentIdx;
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    className={`clay-q-nav-btn ${isCurrent ? "current" : isAnswered ? "answered" : "unanswered"}`}
+                    onClick={() => {
+                      setCurrentIdx(idx);
+                      setShowNavModal(false);
+                    }}
+                    style={{
+                      width: "100%",
+                      height: 44,
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                    }}
+                  >
+                    {idx + 1}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="clay-btn clay-btn-ghost"
+              style={{ width: "100%", justifyContent: "center" }}
+              onClick={() => setShowNavModal(false)}
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* SUBMIT CONFIRMATION DIALOG */}
+      {/* ============================================================ */}
       <ConfirmDialog
         isOpen={showSubmitConfirm}
         title="Kumpulkan Jawaban?"
         message={
           unansweredCount > 0
-            ? `Masih ada ${unansweredCount} soal yang belum dijawab. Setelah dikumpulkan, jawaban tidak dapat diubah kembali.`
-            : "Semua soal telah dijawab. Apakah Anda yakin ingin mengumpulkan jawaban? Tindakan ini tidak dapat dibatalkan."
+            ? `Masih ada ${unansweredCount} soal yang belum dijawab (${answeredCount}/${orderedQuestions.length} selesai). Setelah dikumpulkan, jawaban tidak dapat diubah kembali.`
+            : `Semua ${orderedQuestions.length} soal telah dijawab. Apakah Anda yakin ingin mengumpulkan jawaban sekarang?`
         }
-        confirmLabel="Ya, Kumpulkan"
+        confirmLabel="Ya, Kumpulkan Jawaban"
         cancelLabel="Kembali ke Soal"
         variant={unansweredCount > 0 ? "warning" : "primary"}
         isLoading={isSubmitting}
