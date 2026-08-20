@@ -40,10 +40,13 @@ export default function LoginPage() {
       });
 
       if (error) {
-        toast.error("Login gagal", error.message === "Invalid login credentials"
-          ? "Email atau password salah"
-          : error.message
-        );
+        let errorMsg = error.message;
+        if (error.message === "Invalid login credentials") {
+          errorMsg = "Email atau password salah";
+        } else if (error.message.toLowerCase().includes("email not confirmed")) {
+          errorMsg = "Email akun belum dikonfirmasi di Supabase. Silakan jalankan query konfirmasi di Supabase SQL Editor atau matikan 'Confirm email' di pengaturan Supabase Auth.";
+        }
+        toast.error("Login gagal", errorMsg);
         return;
       }
 
