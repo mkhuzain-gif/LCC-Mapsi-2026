@@ -19,11 +19,20 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name")
+    .select("role, full_name, email")
     .eq("id", user.id)
     .single();
 
   const role: UserRole = (profile?.role as UserRole) ?? "admin";
 
-  return <SettingsClient role={role} />;
+  return (
+    <SettingsClient
+      role={role}
+      currentUser={{
+        id: user.id,
+        email: user.email || profile?.email || "",
+        fullName: profile?.full_name || "",
+      }}
+    />
+  );
 }
