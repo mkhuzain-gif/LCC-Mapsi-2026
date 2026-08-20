@@ -7,7 +7,7 @@ import { useToast } from "@/components/shared/ToastProvider";
 import { createClient } from "@/lib/supabase/client";
 import {
   Plus, Search, Filter, Download, Upload, RefreshCw,
-  Edit2, Trash2, Hash, QrCode, UserCheck, ChevronLeft,
+  Edit2, Trash2, QrCode, UserCheck, ChevronLeft,
   ChevronRight, X, ChevronUp, ChevronDown, FileSpreadsheet,
 } from "lucide-react";
 import type { Participant } from "@/lib/types/database";
@@ -259,28 +259,6 @@ export function ParticipantsClient({ initialParticipants }: { initialParticipant
     return sortDir === "asc" ? <ChevronUp size={12} /> : <ChevronDown size={12} />;
   };
 
-  // Generate draw numbers
-  const generateDrawNumbers = async () => {
-    if (!confirm("Generate nomor undian untuk semua peserta yang belum memiliki nomor? Ini akan menimpa nomor yang sudah ada.")) return;
-    setIsLoading(true);
-    const shuffled = [...participants].sort(() => Math.random() - 0.5);
-    const updates = shuffled.map((p, i) => ({
-      id: p.id,
-      draw_number: String(i + 1).padStart(3, "0"),
-      access_code: `P${String(i + 1).padStart(3, "0")}`,
-    }));
-
-    for (const upd of updates) {
-      await supabase.from("participants").update({
-        draw_number: upd.draw_number,
-        access_code: upd.access_code,
-      }).eq("id", upd.id);
-    }
-    toast.success("Nomor undian dibuat", `${updates.length} nomor undian berhasil digenerate`);
-    await refresh();
-    setIsLoading(false);
-  };
-
   // Download Excel Template for Importing Participants
   const handleDownloadTemplate = () => {
     const templateData = [
@@ -421,9 +399,6 @@ export function ParticipantsClient({ initialParticipants }: { initialParticipant
             </button>
             <button className="clay-btn clay-btn-secondary clay-btn-sm" onClick={handleExport} id="participants-export-btn">
               <Download size={14} /> Export
-            </button>
-            <button className="clay-btn clay-btn-accent clay-btn-sm" onClick={generateDrawNumbers} id="participants-draw-btn">
-              <Hash size={14} /> Generate Undian
             </button>
             <button
               className="clay-btn clay-btn-primary clay-btn-sm"
