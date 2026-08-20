@@ -10,7 +10,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#ffffff",
+  themeColor: "#6d28d9",
   viewportFit: "cover",
 };
 
@@ -84,7 +84,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
-        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-TileColor" content="#6d28d9" />
         <meta name="msapplication-TileImage" content="/icon-512.png" />
         <meta name="msapplication-tap-highlight" content="no" />
 

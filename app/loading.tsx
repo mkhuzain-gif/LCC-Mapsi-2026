@@ -1,12 +1,10 @@
-import Image from "next/image";
-
 export default function Loading() {
   return (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        backgroundColor: "#ffffff",
+        background: "linear-gradient(135deg, #f0ebff 0%, #e0d7ff 50%, #dbeafe 100%)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -17,16 +15,16 @@ export default function Loading() {
     >
       <div
         style={{
-          width: 96,
-          height: 96,
+          width: 90,
+          height: 90,
           borderRadius: 24,
           background: "#ffffff",
-          boxShadow: "0 10px 30px rgba(109, 40, 217, 0.15), 0 2px 8px rgba(0,0,0,0.06)",
-          border: "1.5px solid #f0ebff",
+          boxShadow: "0 12px 36px rgba(109, 40, 217, 0.2), 0 4px 12px rgba(0,0,0,0.06)",
+          border: "2px solid rgba(255,255,255,0.9)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: 10,
+          padding: 8,
           marginBottom: "1.25rem",
           animation: "pulse 1.8s ease-in-out infinite",
         }}
@@ -38,6 +36,7 @@ export default function Loading() {
             width: "100%",
             height: "100%",
             objectFit: "contain",
+            borderRadius: 16,
           }}
         />
       </div>
@@ -45,11 +44,13 @@ export default function Loading() {
       <div
         style={{
           fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-          fontWeight: 800,
-          fontSize: "1.15rem",
-          color: "#6d28d9",
+          fontWeight: 900,
+          fontSize: "1.25rem",
+          background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
           letterSpacing: "-0.01em",
-          marginBottom: "0.4rem",
+          marginBottom: "0.3rem",
         }}
       >
         LCC MAPSI XXVII
@@ -57,21 +58,21 @@ export default function Loading() {
 
       <div
         style={{
-          fontSize: "0.8rem",
+          fontSize: "0.825rem",
           color: "#6b7280",
           fontWeight: 600,
           marginBottom: "1.5rem",
         }}
       >
-        Sistem Ujian Online PAI & BTQ
+        Sistem Ujian Online PAI & BTQ 2026
       </div>
 
-      {/* Modern animated loader */}
+      {/* Claymorphism Spinner */}
       <div
         style={{
-          width: 32,
-          height: 32,
-          border: "3px solid #ede9fe",
+          width: 28,
+          height: 28,
+          border: "3px solid #ddd6fe",
           borderTopColor: "#6d28d9",
           borderRadius: "50%",
           animation: "spin 0.8s linear infinite",
