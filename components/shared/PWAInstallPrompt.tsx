@@ -119,6 +119,8 @@ export function PWAInstallPrompt() {
             right: "1rem",
             zIndex: 9999,
             maxWidth: 480,
+            width: "calc(100% - 2rem)",
+            boxSizing: "border-box",
             margin: "0 auto",
             animation: "slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
