@@ -10,7 +10,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#6d28d9",
+  themeColor: "#ffffff",
   viewportFit: "cover",
 };
 
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   // ── Apple PWA ──
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "LCC MAPSI",
   },
 
@@ -78,13 +78,13 @@ export default function RootLayout({
         {/* Apple & Microsoft PWA Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="LCC MAPSI" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
-        <meta name="msapplication-TileColor" content="#6d28d9" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/icon-512.png" />
         <meta name="msapplication-tap-highlight" content="no" />
 
