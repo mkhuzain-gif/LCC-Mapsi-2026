@@ -3,8 +3,8 @@
 // Strategi: Cache-First untuk aset statis, Network-First untuk Navigasi & API
 // ============================================================
 
-const STATIC_CACHE = "lcc-mapsi-static-v3";
-const DYNAMIC_CACHE = "lcc-mapsi-dynamic-v3";
+const STATIC_CACHE = "lcc-mapsi-static-v4";
+const DYNAMIC_CACHE = "lcc-mapsi-dynamic-v4";
 
 // Aset statis yang di-cache saat install
 const STATIC_ASSETS = [
